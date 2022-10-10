@@ -1,0 +1,3 @@
+﻿  main.cpp
+C:\Users\z.kate\source\repos\Calculator\Calculator.hpp(35): warning C4715: Calculator::makeBinaryCalculation: значение возвращается не при всех путях выполнения
+  Calculator.vcxproj -> C:\Users\z.kate\source\repos\Calculator\x64\Debug\Calculator.exe
