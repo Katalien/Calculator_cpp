@@ -4,13 +4,13 @@
 using namespace std;
 
 enum class SymbolType {
-	number,
-	function,
-	unaryOperator,
-	binaryOperator,
-	closeBracket,
-	openBracket
-};
+		number,
+		function,
+		unaryOperator,
+		binaryOperator,
+		closeBracket,
+		openBracket
+	};
 
 class Symbol {
 public:

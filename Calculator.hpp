@@ -1,8 +1,10 @@
+#pragma once
 #include<iostream>
 #include<vector>
 #include<queue>
 #include<stack>
 #include"ExprHandler.hpp"
+#include"Operators.hpp"
 
 using namespace std;
 
@@ -46,9 +48,8 @@ public:
 		cout << endl;
 	}
 
-	// 7 2 3 * -
-	double countPostNote(queue<Symbol>& postfixExpr) {
-		//take postfix notation and count the result
+	//take postfix notation and count the result
+	double countPostNote(queue<Symbol>& postfixExpr) {		
 		stack<double> stack;
 		while (!postfixExpr.empty()) {
 			Symbol curSymbol = postfixExpr.front();
@@ -58,20 +59,18 @@ public:
 				continue;
 			}
 			if (curSymbol.getType() == SymbolType::binaryOperator) {
+				
+
 				double a = stack.top();
+				double b;
 				stack.pop();
-				double b = stack.top();
-				stack.pop();
-				double res = makeBinaryCalculation(a, curSymbol, b);
+				if (curSymbol.getType() == SymbolType::binaryOperator) {
+					b = stack.top();
+					stack.pop();
+				}
+				double res = Operators::GetOperators().operation(a, curSymbol.getName(), b);
 				stack.push(res);
 				postfixExpr.pop();
-				continue;
-			}
-			if (curSymbol.getType() == SymbolType::unaryOperator) {
-				double a = stack.top();
-				stack.pop();
-				double res = makeUnaryCalculation(a);
-				stack.push(res);
 				continue;
 			}
 		}
