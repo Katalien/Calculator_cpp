@@ -9,7 +9,8 @@ enum class SymbolType {
 		unaryOperator,
 		binaryOperator,
 		closeBracket,
-		openBracket
+		openBracket,
+		undefined
 	};
 
 class Symbol {
@@ -17,9 +18,35 @@ public:
 	
 	string getName() { return name; };
 	SymbolType getType() { return type; ; };
+	void setName(string& _name) { name = _name; };
+	void setType(SymbolType _type) { type = _type; };
 
-//private:
+	void setType(string& _name, char const& prev, int const& symbolPos) {
+		if (name == "") {
+			name = _name;
+		}
+		if (name == "+" || name == "*" || name == "/") {
+			type = SymbolType::binaryOperator;
+		}
+		if (name == "-") {
+			if (symbolPos == 0 || (symbolPos != 0 && prev == '(') && prev != ')') {
+				type = SymbolType::unaryOperator;
+				name = '--';
+			}
+			else {
+				type = SymbolType::binaryOperator;
+			}
+		}
+		if (name == "(") {
+			type = SymbolType::openBracket;
+		}
+		if (name == ")") {
+			type = SymbolType::closeBracket;
+		}
+	}
+
+private:
 
 	string name = "";
-	SymbolType type;
+	SymbolType type = SymbolType::undefined;
 };

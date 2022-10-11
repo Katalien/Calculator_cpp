@@ -10,7 +10,7 @@ using namespace std;
 
 class Calculator {
 public:
-	double calculate(string const& expr) {
+	double calculate(string& expr) {
 		ExprHandler handler;
 		Container container = handler.splitExpr(expr);
 		queue<Symbol> postNote = toPostNote(container);
@@ -21,25 +21,6 @@ public:
 		// take parsed expr and create a queue in postfix notation
 	}
 
-	double makeBinaryCalculation(double a, Symbol operation, double b) {
-		if (operation.getName() == "add") {
-			return a + b;
-		}
-		if (operation.getName() == "substruct") {
-			return b - a;
-		}
-		if (operation.getName() == "multiply") {
-			return a * b;
-		}
-		if (operation.getName() == "divide") {
-			return b / a;
-		}
-	}
-
-	double makeUnaryCalculation(double a) {
-		return 0.0 - a;
-	}
-
 	void print(stack<double> stack) {
 		for (int i = 0; i < stack.size(); ++i) {
 			cout << stack.top() << " ";
@@ -48,8 +29,11 @@ public:
 		cout << endl;
 	}
 
-	//take postfix notation and count the result
-	double countPostNote(queue<Symbol>& postfixExpr) {		
+
+
+private:
+	//take container with elements in postfix notation and count the result
+	double countPostNote(queue<Symbol>& postfixExpr) {
 		stack<double> stack;
 		while (!postfixExpr.empty()) {
 			Symbol curSymbol = postfixExpr.front();
@@ -59,8 +43,6 @@ public:
 				continue;
 			}
 			if (curSymbol.getType() == SymbolType::binaryOperator) {
-				
-
 				double a = stack.top();
 				double b;
 				stack.pop();
@@ -76,8 +58,5 @@ public:
 		}
 		return stack.top();
 	}
-
-private:
-	
 
 };

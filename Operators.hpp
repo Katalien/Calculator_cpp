@@ -23,6 +23,7 @@ private:
 		operations["-"] = [](double a, double b)->double {return b - a;};
 		operations["*"] = [](double a, double b)->double {return a * b;};
 		operations["/"] = [](double a, double b)->double {return b / a;};
+		operations["--"] = [](double a, double b)->double {return 0-a;};
 	};
 
 	mapOperators operations;
