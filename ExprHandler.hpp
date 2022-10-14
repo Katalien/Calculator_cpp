@@ -48,6 +48,9 @@ public:
 				i--;
 				numStr = "";
 			}
+			else {
+				throw exception("wrong symbols. Check your expression and try again");
+			}
 		}
 		return container;
 	}

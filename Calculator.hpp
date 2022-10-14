@@ -5,26 +5,70 @@
 #include<stack>
 #include"ExprHandler.hpp"
 #include"Operators.hpp"
+#include<optional>
+#include<algorithm>
 
 using namespace std;
 
 class Calculator {
 public:
-	double calculate(string& expr) {
+	std::optional<double> calculate(string& expr) {
+		Container container;
 		ExprHandler handler;
-		Container container = handler.splitExpr(expr);
-		try { 
-			checkValidity(container);
+		queue<shared_ptr<Symbol>> postNote;
+		try {
+			container = handler.splitExpr(expr);
+			checkBrackets(container);
+			checkOperators(container);
+			postNote = toPostNote(container);
 		}
-		catch (exception e) {
-		//
-		};
-		queue<shared_ptr<Symbol>> postNote = toPostNote(container);
+		catch (std::exception& e) {
+			cout << e.what();
+			return nullopt;
+		}
 		return countPostNote(postNote);
 	}
 
-	void checkValidity(Container container) {
-	};
+	void checkBrackets(Container const& expr) const {
+		stack<shared_ptr<Symbol>> brackets;
+		for (auto const& s : expr) {
+			if (s->getName() == "(") {
+				brackets.push(s);
+			}
+			if (s->getName() == ")") {
+				if (brackets.empty()) {
+					throw exception("check your brackets");
+					return;
+				}
+				brackets.pop();
+			}
+		}
+		if (!brackets.empty()) {
+			throw exception("check your brackets");
+		}
+	}
+
+	void checkOperators(Container const& expr) const {
+		for (int i = 0; i < expr.size(); ++i) {
+			if (i == 0 && 
+				(expr[i]->getType() != SymbolType::number && 
+				 expr[i]->getType() != SymbolType::unaryOperator &&
+				 expr[i]->getType() != SymbolType::openBracket)) {
+				throw exception("First symbol can't be a binary operator. Try again");
+				return;
+			}
+			if ( i != expr.size() - 1 && expr[i]->getType() == SymbolType::binaryOperator &&	
+				(expr[i - 1]->getType() == SymbolType::binaryOperator ||
+				expr[i + 1]->getType() == SymbolType::binaryOperator)) {
+				throw exception("wrong expression. Check it and try again");
+				return;
+			}
+			if (i == expr.size() - 1 && expr[i]->getType() == SymbolType::binaryOperator) {
+				throw exception("Last symbol can't be a binary operator. Try again");
+				return;
+			}
+		}
+	}
 
 // take parsed expr and create a queue in postfix notation
 	queue<shared_ptr<Symbol>> toPostNote(Container const& container) {
@@ -52,10 +96,13 @@ public:
 				continue;
 			}
 			if (s->getType() == SymbolType::closeBracket) {
-				while (stack.top()->getType() != SymbolType::openBracket && !stack.empty()) {
+				while (!stack.empty() && stack.top()->getType() != SymbolType::openBracket ) {
 					postfixExpr.push(stack.top());
 					stack.pop();
 					// проверка что нет открытой скобки
+				}
+				if (stack.empty()) {
+					throw exception("ooops wrong expresion\n Check it and try again");
 				}
 				stack.pop();
 			}
