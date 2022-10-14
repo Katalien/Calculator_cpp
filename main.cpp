@@ -12,9 +12,9 @@ public:
 
 int main() {
 	Calculator calculator;
-	string expr = "-2-3-4-5";
+	string expr = "((2+3)-6*2) + ((4-2)+(2+3))";
 	cout << "\n\n" << calculator.calculate(expr);
-	
+	//cout << stod(".25");
 
 	//cout << Operators::GetOperators().operation(2, op, 14);;
 	//try {}

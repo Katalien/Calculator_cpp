@@ -26,7 +26,7 @@ public:
 				shared_ptr<Symbol> symbol = make_shared<Symbol>();
 				curStr = convertCharToString(s);
 				symbol->setName(curStr);
-				if (s == '-' && ( (i == 0 ) || ( i!= 0 && ( !isDigit(expr[i - 1]) || expr[i - 1] == '(' ) ) ) ) {
+				if (s == '-' && ( (i == 0 ) || ( i!= 0 && ( !isDigit(expr[i - 1]) && expr[i-1] != ')' || expr[i - 1] == '(')))) {
 					string unarName = "--";
 					symbol->setName(unarName);
 					symbol->setType(SymbolType::unaryOperator);
