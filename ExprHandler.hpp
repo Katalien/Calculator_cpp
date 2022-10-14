@@ -26,11 +26,13 @@ public:
 				shared_ptr<Symbol> symbol = make_shared<Symbol>();
 				curStr = convertCharToString(s);
 				symbol->setName(curStr);
-				if (i == 0 && s == '-') {
+				if (s == '-' && ( (i == 0 ) || ( i!= 0 && ( !isDigit(expr[i - 1]) || expr[i - 1] == '(' ) ) ) ) {
+					string unarName = "--";
+					symbol->setName(unarName);
 					symbol->setType(SymbolType::unaryOperator);
 				}
 				else {
-					symbol->setType(defineType(curStr, expr[i - 1], i));
+					symbol->setType(defineType(curStr, i));
 				}
 				container.push_back(symbol);
 			}
@@ -50,19 +52,14 @@ public:
 		return container;
 	}
 
-	SymbolType defineType(string& name, char const& prev, int const& symbolPos) {
-		SymbolType type;
+	/// ????
+	SymbolType defineType(string& name, int const& symbolPos) {
+		SymbolType type = SymbolType::undefined;
 		if (name == "+" || name == "*" || name == "/") {
 			type = SymbolType::binaryOperator;
 		}
 		if (name == "-") {
-			if ( !isDigit(prev) && prev!='(') {
-				type = SymbolType::unaryOperator;
-				name = '--';
-			}
-			else {
 				type = SymbolType::binaryOperator;
-			}
 		}
 		if (name == "(") {
 			type = SymbolType::openBracket;

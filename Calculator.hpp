@@ -13,44 +13,88 @@ public:
 	double calculate(string& expr) {
 		ExprHandler handler;
 		Container container = handler.splitExpr(expr);
-		queue<Symbol> postNote = toPostNote(container);
-
+		try { 
+			checkValidity(container);
+		}
+		catch (exception e) {
+		//
+		};
+		queue<shared_ptr<Symbol>> postNote = toPostNote(container);
+		return countPostNote(postNote);
 	}
 
-	queue<Symbol> toPostNote(Container container) {
-		// take parsed expr and create a queue in postfix notation
-	}
+	void checkValidity(Container container) {
+	};
 
-	void print(stack<double> stack) {
-		for (int i = 0; i < stack.size(); ++i) {
-			cout << stack.top() << " ";
+// take parsed expr and create a queue in postfix notation
+	queue<shared_ptr<Symbol>> toPostNote(Container const& container) {
+		stack<shared_ptr<Symbol>> stack;
+		queue<shared_ptr<Symbol>> postfixExpr;
+		for (auto& s : container) {
+			if (s->getType() == SymbolType::number) {
+				postfixExpr.push(s);
+				continue;
+			}
+			//проверка что символ- оператор
+			if (s->getType() == SymbolType::binaryOperator || s->getType() == SymbolType::unaryOperator) {
+				int curPriority = Operators::GetOperators().priority(s->getName());
+				if (stack.size() != 0) {
+					while (!stack.empty() && Operators::GetOperators().priority(stack.top()->getName()) >= curPriority ) {
+						postfixExpr.push(stack.top());
+						stack.pop();
+					}
+				}
+				stack.push(s);
+				continue;
+			}
+			if (s->getType() == SymbolType::openBracket) {
+				stack.push(s);
+				continue;
+			}
+			if (s->getType() == SymbolType::closeBracket) {
+				while (stack.top()->getType() != SymbolType::openBracket && !stack.empty()) {
+					postfixExpr.push(stack.top());
+					stack.pop();
+					// проверка что нет открытой скобки
+				}
+				stack.pop();
+			}
+		}
+		while (!stack.empty()) {
+			postfixExpr.push(stack.top());
 			stack.pop();
+		}
+		return postfixExpr;
+	}
+
+	void print(queue<shared_ptr<Symbol>> cont) {
+		for (int i = 0; i < cont.size(); ++i) {
+			cout << cont.front()->getName() << " ";
+			cont.pop();
 		}
 		cout << endl;
 	}
 
-
-
 private:
 	//take container with elements in postfix notation and count the result
-	double countPostNote(queue<Symbol>& postfixExpr) {
+	double countPostNote(queue<shared_ptr<Symbol>>& postfixExpr) {
 		stack<double> stack;
 		while (!postfixExpr.empty()) {
-			Symbol curSymbol = postfixExpr.front();
-			if (curSymbol.getType() == SymbolType::number) {
-				stack.push(stod(postfixExpr.front().getName()));
+			shared_ptr<Symbol> curSymbol = postfixExpr.front();
+			if (curSymbol->getType() == SymbolType::number) {
+				stack.push(stod(postfixExpr.front()->getName()));
 				postfixExpr.pop();
 				continue;
 			}
-			if (curSymbol.getType() == SymbolType::binaryOperator) {
+			if (curSymbol->getType() == SymbolType::binaryOperator || curSymbol->getType() == SymbolType::unaryOperator) {
 				double a = stack.top();
-				double b;
+				double b = 0.0;
 				stack.pop();
-				if (curSymbol.getType() == SymbolType::binaryOperator) {
+				if (curSymbol->getType() == SymbolType::binaryOperator) {
 					b = stack.top();
 					stack.pop();
 				}
-				double res = Operators::GetOperators().operation(a, curSymbol.getName(), b);
+				double res = Operators::GetOperators().operation(a, curSymbol->getName(), b);
 				stack.push(res);
 				postfixExpr.pop();
 				continue;

@@ -5,20 +5,17 @@
 //#include"Symbol.hpp"
 //#include"ExprHandler.hpp"
 
+class A {
+public:
+	int a;
+};
 
 int main() {
-	//Calculator calculator;
-	//string expr = "";
-	//string op = "/";
-	//string s = "a aa aaa Ba aa aa aa";
-	//deleteSpaces(s);
-	//cout << s;
+	Calculator calculator;
+	string expr = "-2-3-4-5";
+	cout << "\n\n" << calculator.calculate(expr);
 	
-	string str = "-1 + 32*(2/2)*-1";
-	ExprHandler handler;
-	handler.splitExpr(str);
 
-	
 	//cout << Operators::GetOperators().operation(2, op, 14);;
 	//try {}
 	//catch{};// expression is correct
