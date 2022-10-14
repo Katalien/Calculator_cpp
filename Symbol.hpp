@@ -16,14 +16,13 @@ enum class SymbolType {
 
 class Symbol {
 public:
-	
+
 	string getName() { return name; };
 	SymbolType getType() { return type; ; };
 	void setName(string& _name) { name = _name; };
 	void setType(SymbolType _type) { type = _type; };
 
 private:
-
 	string name = "";
 	SymbolType type = SymbolType::undefined;
 };

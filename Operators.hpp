@@ -10,36 +10,17 @@ using PriorityMap = map<string const, int>;
 
 class Operators {
 public:
-	static Operators& GetOperators() {
-		static Operators instance;
-		return instance;
-	};
 
-	int priority(string const& operationName) {
-		return priorityMap[operationName];
-	}
+	static Operators& GetOperators();
 
-	double operation(double a, string name, double b) {
-		return operations[name](a, b);
-	};
+	int priority(string const& operationName);
+
+	double operation(double const& a, string const& name, double const& b);
 
 private:
-	Operators() {
-		operations["+"] = [](double a, double b)->double {return a + b;};
-		operations["-"] = [](double a, double b)->double {return b - a;};
-		operations["*"] = [](double a, double b)->double {return a * b;};
-		operations["/"] = [](double a, double b)->double {return b / a;};
-		operations["--"] = [](double a, double b)->double {return 0-a;};
-
-		priorityMap["("] = 0;
-		priorityMap["+"] = 1;
-		priorityMap["-"] = 1;
-		priorityMap["*"] = 2;
-		priorityMap["/"] = 2;
-		priorityMap["--"] = 3;
-	};
-
+	Operators();
 
 	PriorityMap priorityMap;
+
 	mapOperators operations;
 };
