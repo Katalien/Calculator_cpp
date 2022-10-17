@@ -2,20 +2,19 @@
 #include<map>
 #include<functional>
 
-using namespace std;
 
-using mapOperators = map<string, function<double(double, double)>>;
+using mapOperators = std::map<std::string, std::function<double(double, double)>>;
 
-using PriorityMap = map<string const, int>;
+using PriorityMap = std::map<std::string const, int>;
 
 class Operators {
 public:
 
 	static Operators& GetOperators();
 
-	int priority(string const& operationName);
+	int priority(std::string const& operationName);
 
-	double operation(double const& a, string const& name, double const& b);
+	double operation(double const& a, std::string const& name, double const& b);
 
 private:
 	Operators();

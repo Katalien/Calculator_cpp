@@ -1,18 +1,18 @@
 #include"ExprHandler.hpp"
 
-Container ExprHandler::splitExpr(string& expr) {
+Container ExprHandler::splitExpr(std::string& expr) {
 	deleteSpaces(expr);
 	int pos = 0;
-	stringstream ss;
-	string curStr, numStr;
+	std::stringstream ss;
+	std::string curStr, numStr;
 	for (int i = 0; i < expr.size(); ++i) {
 		char s = expr[i];
-		if (s == '+' || s == '-' || s == '*' || s == '/' || s == '(' || s == ')') {
-			shared_ptr<Symbol> symbol = make_shared<Symbol>();
+		if (s == '+' || s == '-' || s == '*' || s == '/' || s == '(' || s == ')' || s == '^') {
+			std::shared_ptr<Symbol> symbol = std::make_shared<Symbol>();
 			curStr = convertCharToString(s);
 			symbol->setName(curStr);
 			if (s == '-' && ((i == 0) || (i != 0 && (!isDigit(expr[i - 1]) && expr[i - 1] != ')' || expr[i - 1] == '(')))) {
-				string unarName = "--";
+				std::string unarName = "--";
 				symbol->setName(unarName);
 				symbol->setType(SymbolType::unaryOperator);
 			}
@@ -26,23 +26,33 @@ Container ExprHandler::splitExpr(string& expr) {
 				numStr += convertCharToString(expr[i]);
 				i++;
 			}
-			shared_ptr<Symbol> numSymbol = make_shared<Symbol>();
+			std::shared_ptr<Symbol> numSymbol = std::make_shared<Symbol>();
 			numSymbol->setName(numStr);
 			numSymbol->setType(SymbolType::number);
 			container.push_back(numSymbol);
 			i--;
 			numStr = "";
 		}
-		else {
-			throw exception("wrong symbols. Check your expression and try again");
+		///
+		else if(isalpha(expr[i])) {
+			while (isalpha(expr[i])) {
+				numStr += convertCharToString(expr[i]);
+				i++;
+			}
+			std::shared_ptr<Symbol> numSymbol = std::make_shared<Symbol>();
+			numSymbol->setName(numStr);
+			numSymbol->setType(SymbolType::function);
+			container.push_back(numSymbol);
+			i--;
+			numStr = "";
 		}
 	}
 	return container;
 }
 
-SymbolType ExprHandler::defineType(string const& name, int const& symbolPos) const {
+SymbolType ExprHandler::defineType(std::string const& name, int const& symbolPos) const {
 	SymbolType type = SymbolType::undefined;
-	if (name == "+" || name == "*" || name == "/") {
+	if (name == "+" || name == "*" || name == "/" || name == "^") {
 		type = SymbolType::binaryOperator;
 	}
 	if (name == "-") {
@@ -57,9 +67,9 @@ SymbolType ExprHandler::defineType(string const& name, int const& symbolPos) con
 	return type;
 }
 
-string ExprHandler::convertCharToString(char const& s) const {
-	stringstream ss;
-	string str;
+std::string ExprHandler::convertCharToString(char const& s) const {
+	std::stringstream ss;
+	std::string str;
 	ss << s;
 	ss >> str;
 	return str;
@@ -74,8 +84,17 @@ bool ExprHandler::isDigit(char const& s) const {
 	}
 }
 
-void ExprHandler::deleteSpaces(string& str) {
-	while (str.find(' ') != string::npos) {
+bool ExprHandler::isLetter(char const& s) const {
+	if ((s >= 'A' && s <= 'Z') || (s >= 'a' && s <= 'z')) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void ExprHandler::deleteSpaces(std::string& str) {
+	while (str.find(' ') != std::string::npos) {
 		str.erase(str.find(' '), 1);
 	}
 };

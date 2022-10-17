@@ -2,7 +2,6 @@
 #include<string>
 #include<map>
 
-using namespace std;
 
 enum class SymbolType {
 		number,
@@ -16,13 +15,16 @@ enum class SymbolType {
 
 class Symbol {
 public:
+	std::string getName() { return name; };
 
-	string getName() { return name; };
 	SymbolType getType() { return type; ; };
-	void setName(string& _name) { name = _name; };
+
+	void setName(std::string& _name) { name = _name; };
+
 	void setType(SymbolType _type) { type = _type; };
 
 private:
-	string name = "";
+	std::string name = "";
+
 	SymbolType type = SymbolType::undefined;
 };

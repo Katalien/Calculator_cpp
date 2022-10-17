@@ -5,26 +5,27 @@
 #include<vector>
 #include"Symbol.hpp"
 
-using namespace std;
 
-using Container = vector<shared_ptr<Symbol>>;
+using Container = std::vector<std::shared_ptr<Symbol>>;
 
 class ExprHandler {
 public:
 
 	ExprHandler() = default;
 
-	Container splitExpr(string& expr);
+	Container splitExpr(std::string& expr);
 
 private:
 	Container container;
 
-	SymbolType defineType(string const& name, int const& symbolPos) const;
+	SymbolType defineType(std::string const& name, int const& symbolPos) const;
 
-	string convertCharToString(char const& s) const;
+	std::string convertCharToString(char const& s) const;
 
 	bool isDigit(char const& s) const;
 
-	void deleteSpaces(string& str);
+	bool isLetter(char const& s) const;
+
+	void deleteSpaces(std::string& str);
 
 };
