@@ -7,7 +7,7 @@ int main() {
 	Calculator calculator;
 	while (true) {
 		std::string expression;
-		std::cout << "Enter your expression:" << std::endl;
+		std::cout << "Enter your expression or press Enter to exit:" << std::endl;
 		std::getline(std::cin, expression);
 		if (expression == "" || expression == "exit") {
 			break;

@@ -2,7 +2,6 @@
 #include<map>
 #include<functional>
 
-
 using mapOperators = std::map<std::string, std::function<double(double, double)>>;
 
 using PriorityMap = std::map<std::string const, int>;
@@ -18,6 +17,10 @@ public:
 
 private:
 	Operators();
+
+	Operators(const Operators&) = delete;
+
+	Operators& operator=(Operators const&) = delete;
 
 	PriorityMap priorityMap;
 

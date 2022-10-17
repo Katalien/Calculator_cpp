@@ -104,11 +104,11 @@ void Calculator::manageFunction(PostNoteQueue& postfixExpr, std::stack<double>& 
 	double b = 0.0;
 	stack.pop();
 	PluginLoader func;
-	if (func.binaryFunctions.contains(curSymbol->getName())) {
+	if (func.containsBinaryFunc(curSymbol->getName())) {
 		b = stack.top();
 		stack.pop();
 	}
-	if (!func.unaryFunctions.contains(curSymbol->getName()) && !func.binaryFunctions.contains(curSymbol->getName())) {
+	if (!func.containsUnaryFunc(curSymbol->getName()) && !func.containsBinaryFunc(curSymbol->getName())) {
 		throw std::exception("no such function");
 		return;
 	}
